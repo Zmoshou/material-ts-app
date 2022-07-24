@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ThemeProvider as TProvide } from "@mui/material/styles";
+import { createTheme, ThemeProvider as TProvide, useTheme } from "@mui/material/styles";
+import { zhCN, enUS, Localization } from "@mui/material/locale";
 import { useAppSelector } from "../store/hooks";
 
 import light from "./light";
@@ -9,21 +10,33 @@ type Props = {
   children?: React.ReactNode;
 };
 
-type ThemeM = {
+type ThemeType = {
   dark: object;
   light: object;
   [key: string]: object;
 };
 
-const themeMap: ThemeM = {
+const themeMap: ThemeType = {
   dark: dark,
   light: light,
 };
 
+type localesType = {
+  zhCN: Localization;
+  enUS: Localization;
+};
+
+const localesMap: localesType = {
+  zhCN: zhCN,
+  enUS: enUS,
+};
+
 const ThemeProvider = ({ children }: Props) => {
   const theme = useAppSelector((state) => state.common.theme);
+  const locale = useAppSelector((state) => state.common.locale) as never;
+  const themeWithLocale = React.useMemo(() => createTheme(themeMap[theme], localesMap[locale]), [locale, theme]);
 
-  return <TProvide theme={themeMap[theme]}>{children}</TProvide>;
+  return <TProvide theme={themeWithLocale}>{children}</TProvide>;
 };
 
 export default ThemeProvider;

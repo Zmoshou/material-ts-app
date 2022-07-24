@@ -4,10 +4,12 @@ import type { RootState } from "./rootStore";
 
 export interface State {
   theme: string;
+  locale: string;
 }
 
 const initialState: State = {
   theme: "light",
+  locale: "zhCN",
 };
 
 export const counterSlice = createSlice({
@@ -16,6 +18,9 @@ export const counterSlice = createSlice({
   reducers: {
     setTheme: (state, action: PayloadAction<string>) => {
       state.theme = action.payload;
+    },
+    setLocale: (state, action: PayloadAction<string>) => {
+      state.locale = action.payload;
     },
   },
 });
